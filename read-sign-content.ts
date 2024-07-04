@@ -4,7 +4,6 @@
  * ? diferente da proposta inicial que é somente verificar se o PDF está assinado ou não.
  */
 
-import forge from 'node-forge'
 import axios from 'axios'
 import { PDFDict, PDFDocument, PDFName } from 'pdf-lib'
 
@@ -47,24 +46,10 @@ const sut = async () => {
       }
 
       const signatureContent = contents.value
+      const hexData = signatureContent.toString('hex')
+      const hexToBytes = Buffer.from(hexData, 'hex')
 
-      // Decode the signature content using node-forge
-      const decodedContent = forge.util.decode64(signatureContent)
-
-      try {
-        // ! Error parsing PKCS#7 structure: Error: Unparsed DER bytes remain after ASN.1 parsing.
-        const p7Asn1 = forge.asn1.fromDer(decodedContent, false)
-
-        const message = forge.pkcs7.messageFromAsn1(p7Asn1)
-
-        if (message.rawCapture) {
-          // console.log('Certificates:', message.certificates)
-        } else {
-          console.log('No certificates found in the PKCS#7 message.')
-        }
-      } catch (err) {
-        console.log('Error parsing PKCS#7 structure:', err)
-      }
+      console.log(hexToBytes.toString('utf8'))
     }
   }
 }
