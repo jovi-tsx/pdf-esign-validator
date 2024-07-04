@@ -23,7 +23,7 @@ const verifySignedPDF = async (pdfUrl: string): Promise<Response | {}> => {
     if (hasSignature) {
       return {
         ACTION: 'VALIDAR_DOC',
-        link_documento: URL
+        link_documento: pdfUrl
       }
     } else {
       return {}
